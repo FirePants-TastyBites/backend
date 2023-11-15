@@ -28,6 +28,12 @@ functions:
       - httpApi:
           path: /menu
           method: POST
+  createOrder:
+    handler: functions/createOrder.createOrder
+    events:
+      - httpApi:
+          path: /order
+          method: POST
 
 resources:
   Resources:
@@ -35,6 +41,17 @@ resources:
       Type: AWS::DynamoDB::Table
       Properties:
         TableName: menuTable
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+    orderTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: orderTable
         AttributeDefinitions:
           - AttributeName: id
             AttributeType: S
