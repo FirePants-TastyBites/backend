@@ -1,6 +1,7 @@
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocumentClient, PutCommand } from "@aws-sdk/lib-dynamodb";
 import { nanoid } from "nanoid";
+import { sendResponse } from "../responses/sendResponse";
 
 const client = new DynamoDBClient({});
 const docClient = DynamoDBDocumentClient.from(client);
@@ -23,20 +24,8 @@ export async function createMenu(event) {
             }
         });
         await docClient.send(command);
-        return {
-            statusCode: 200,
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ success: true })
-        }
+        return sendResponse(201, { success: true });
     } catch(err) {
-        return {
-            statusCode: 500,
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ success: false, message: 'Could not create menu item' })
-        }
+        return sendResponse(500, { success: false, message: 'Could not create menu item' });
     }
 }

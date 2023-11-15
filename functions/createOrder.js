@@ -1,6 +1,7 @@
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocumentClient, PutCommand } from "@aws-sdk/lib-dynamodb";
 import { nanoid } from "nanoid";
+import { sendResponse } from "../responses/sendResponse";
 
 const client = new DynamoDBClient({});
 const docClient = DynamoDBDocumentClient.from(client);
@@ -12,18 +13,6 @@ export async function createOrder(event) {
     const id = nanoid();
     const orderTime = new Date();
     const deliveryTime = new Date(new Date().getTime() + 20 * 60000); //= 20 min
-
-    //Denna funktion i frontend ist som uppdaterar isLocked till true i updateOrder
-    function isLocked() {
-      let currentTime = new Date();
-      let fiveMinutesLater = new Date(orderTime.getTime() + 5 * 60 * 1000); //= 5 min
-
-      if (currentTime >= fiveMinutesLater) {
-        return true;
-      } else {
-        return false;
-      }
-    }
 
     const command = new PutCommand({
       TableName: "orderTable",
@@ -39,27 +28,10 @@ export async function createOrder(event) {
       },
     });
 
-    console.log("LOGGING COMMAND ---> ", command);
-
     await docClient.send(command);
 
-    return {
-      statusCode: 200,
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ success: true }),
-    };
+    return sendResponse(201, { success: true });
   } catch (err) {
-    return {
-      statusCode: 500,
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        success: false,
-        message: "Could not create order",
-      }),
-    };
+    return sendResponse(500, { success: false, message: 'Could not create order' });
   }
 }
