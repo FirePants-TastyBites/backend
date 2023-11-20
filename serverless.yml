@@ -28,6 +28,12 @@ functions:
       - httpApi:
           path: /menu
           method: POST
+  getOrders:
+    handler: functions/getOrders.getOrders
+    events:
+      - httpApi:
+          path: /orders
+          method: GET
   createOrder:
     handler: functions/createOrder.createOrder
     events:
