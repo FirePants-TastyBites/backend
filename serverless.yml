@@ -40,6 +40,12 @@ functions:
       - httpApi:
           path: /order
           method: POST
+  getOrdersByUserId:
+    handler: functions/getOrdersByUserId.getOrdersByUserId
+    events:
+      - httpApi:
+          path: /user/orders
+          method: GET
 
 resources:
   Resources:
