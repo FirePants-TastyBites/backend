@@ -24,7 +24,7 @@ export async function createOrder(event) {
         isLocked: false, 
         orderItems: orderItems,
         comment: comment,
-        status: 'pending', 
+        orderStatus: 'pending', 
       },
     });
 
