@@ -40,6 +40,12 @@ functions:
       - httpApi:
           path: /order
           method: POST
+  updateOrder:
+    handler: functions/updateOrder.updateOrder
+    events:
+      - httpApi:
+          path: /order
+          method: PUT
 
 resources:
   Resources:
