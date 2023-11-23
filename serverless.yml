@@ -28,12 +28,24 @@ functions:
       - httpApi:
           path: /menu
           method: POST
+  getOrders:
+    handler: functions/getOrders.getOrders
+    events:
+      - httpApi:
+          path: /orders
+          method: GET
   createOrder:
     handler: functions/createOrder.createOrder
     events:
       - httpApi:
           path: /order
           method: POST
+  updateOrder:
+    handler: functions/updateOrder.updateOrder
+    events:
+      - httpApi:
+          path: /order
+          method: PUT
 
 resources:
   Resources:
