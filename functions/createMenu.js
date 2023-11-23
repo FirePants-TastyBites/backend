@@ -27,6 +27,6 @@ export async function createMenu(event) {
         await docClient.send(command);
         return sendResponse(201, { success: true });
     } catch(err) {
-        return sendResponse(500, { success: false, message: 'Could not create menu item' });
+        return sendResponse(err.statusCode, { success: false, message: err.message });
     }
 }

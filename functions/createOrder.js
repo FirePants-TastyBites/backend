@@ -32,6 +32,6 @@ export async function createOrder(event) {
 
     return sendResponse(201, { success: true });
   } catch (err) {
-    return sendResponse(500, { success: false, message: 'Could not create order' });
+        return sendResponse(err.statusCode, { success: false, message: err.message });
   }
 }

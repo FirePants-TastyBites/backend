@@ -16,6 +16,6 @@ export async function getMenu(event) {
         return sendResponse(200, { success: true, menu: response.Items }); 
 
     } catch(err) {
-        return sendResponse(500, { success: false, message: 'Could not get menu' });
+        return sendResponse(err.statusCode, { success: false, message: err.message });
     }
 }
