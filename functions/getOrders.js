@@ -15,6 +15,6 @@ export async function getOrders() {
 
         return sendResponse(200, { success: true, orders: response.Items });
     } catch(err) {
-        return sendResponse(500, { success: false, message: 'Could not get orders' });
+        return sendResponse(err.statusCode, { success: false, message: err.message });
     }
 }
