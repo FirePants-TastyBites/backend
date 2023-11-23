@@ -11,6 +11,7 @@ export async function getOrdersByUserId(event) {
     try {
         const command = new QueryCommand({
             TableName: 'orderTable',
+            IndexName: "userId-gsi",
             KeyConditionExpression: "userId = :userId",
             ExpressionAttributeValues: {
                 ":userId": userId,
@@ -19,11 +20,9 @@ export async function getOrdersByUserId(event) {
 
         const response = await docClient.send(command);
 
-        console.log('RESPONSE --->', response);
-
         return sendResponse(200, { success: true, orders: response.Items });
 
     } catch(err) {
-        return sendResponse(500, { success: false, message: 'Could not get order' });
+        return sendResponse(err.statusCode, { success: false, message: err.message });
     }
 }
