@@ -52,6 +52,18 @@ functions:
       - httpApi:
           path: /user/orders
           method: GET
+  getUser:
+    handler: functions/getUser.getUser
+    events:
+      - httpApi:
+          path: /user
+          method: GET
+  createUser:
+    handler: functions/createUser.createUser
+    events:
+      - httpApi:
+          path: /user
+          method: POST
 
 resources:
   Resources:
@@ -86,3 +98,15 @@ resources:
             Projection:
               ProjectionType: ALL
         BillingMode: PAY_PER_REQUEST
+    userTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: userTable
+        AttributeDefinitions:
+          - AttributeName: email
+            AttributeType: S
+        KeySchema:
+          - AttributeName: email
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+
