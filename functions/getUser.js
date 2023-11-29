@@ -1,6 +1,7 @@
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
-import { DynamoDBDocumentClient, GetCommand } from "@aws-sdk/lib-dynamodb";
+import { DynamoDBDocumentClient, GetCommand, ScanCommand } from "@aws-sdk/lib-dynamodb";
 import { sendResponse } from "../responses/sendResponse";
+import { decrypt } from "./decrypt";
 
 const client = new DynamoDBClient({});
 const docClient = DynamoDBDocumentClient.from(client);
@@ -9,17 +10,18 @@ export async function getUser(event) {
     const { email, password } = JSON.parse(event.body);
 
     try {
-        const command = new GetCommand({
-            TableName: 'userTable',
-            Key: {
-                email: email
-            }
+        const command = new ScanCommand({
+            TableName: 'usersTable'
         });
-
+            
         const response = await docClient.send(command);
-        
-        if (password === response.Item.password) {
-            return sendResponse(200, { success: true, user: response.Item }); //Dont send everything in the response, like password
+
+        let allUsers = response.Items;
+        let userWithDecryptedEmail = allUsers.find(user => decrypt(user.email) === email);        
+        let decryptedPassword = decrypt(userWithDecryptedEmail.password);
+     
+        if (password === decryptedPassword) {
+            return sendResponse(200, { success: true, email: decrypt(userWithDecryptedEmail.email), isAdmin: userWithDecryptedEmail.isAdmin }); //Dont send everything in the response, like password
         } else {
             return sendResponse(404, { success: false, message: 'Wrong password' });
         }
