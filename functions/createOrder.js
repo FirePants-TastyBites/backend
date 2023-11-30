@@ -16,7 +16,7 @@ export async function createOrder(event) {
     const command = new PutCommand({
       TableName: "orderTable",
       Item: {
-        id: id,
+        id: id, //Skickas från frontend
         userId: userId, //Use email for now
         totalAmount: totalAmount,
         createdAt: createdAt.toISOString(),
