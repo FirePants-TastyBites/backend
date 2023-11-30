@@ -35,6 +35,6 @@ export async function updateOrder(event) {
         return sendResponse(200, { success: true, updatedOrder: response.Items });
 
     } catch(err) {
-        return sendResponse(500, { success: false, message: 'Could not update order' });
+        return sendResponse(err.statusCode, { success: false, message: err.message });
     }
 }

@@ -46,6 +46,24 @@ functions:
       - httpApi:
           path: /order
           method: PUT
+  getOrdersByUserId:
+    handler: functions/getOrdersByUserId.getOrdersByUserId
+    events:
+      - httpApi:
+          path: /user/orders
+          method: GET
+  getUser:
+    handler: functions/getUser.getUser
+    events:
+      - httpApi:
+          path: /user
+          method: GET
+  createUser:
+    handler: functions/createUser.createUser
+    events:
+      - httpApi:
+          path: /user
+          method: POST
 
 resources:
   Resources:
@@ -67,7 +85,28 @@ resources:
         AttributeDefinitions:
           - AttributeName: id
             AttributeType: S
+          - AttributeName: userId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        GlobalSecondaryIndexes:
+          - IndexName: userId-gsi
+            KeySchema:
+              - AttributeName: userId
+                KeyType: HASH
+            Projection:
+              ProjectionType: ALL
+        BillingMode: PAY_PER_REQUEST
+    usersTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: usersTable
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
         KeySchema:
           - AttributeName: id
             KeyType: HASH
         BillingMode: PAY_PER_REQUEST
+
