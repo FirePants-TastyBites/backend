@@ -1,5 +1,5 @@
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
-import { DynamoDBDocumentClient, GetCommand, ScanCommand } from "@aws-sdk/lib-dynamodb";
+import { DynamoDBDocumentClient, ScanCommand } from "@aws-sdk/lib-dynamodb";
 import { sendResponse } from "../responses/sendResponse";
 import { decrypt } from "./decrypt";
 
