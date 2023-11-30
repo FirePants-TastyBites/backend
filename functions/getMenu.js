@@ -5,7 +5,7 @@ import { sendResponse } from "../responses/sendResponse";
 const client = new DynamoDBClient({});
 const docClient = DynamoDBDocumentClient.from(client);
 
-export async function getMenu(event) {
+export async function getMenu() {
     try {
         const command = new ScanCommand({
             TableName: 'menuTable',
