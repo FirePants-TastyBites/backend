@@ -21,9 +21,9 @@ export async function getUser(event) {
         let decryptedPassword = decrypt(userWithDecryptedEmail.password);
      
         if (password === decryptedPassword) {
-            return sendResponse(200, { success: true, email: decrypt(userWithDecryptedEmail.email), isAdmin: userWithDecryptedEmail.isAdmin }); //Dont send everything in the response, like password
+            return sendResponse(200, { success: true, email: decrypt(userWithDecryptedEmail.email), isAdmin: userWithDecryptedEmail.isAdmin });
         } else {
-            return sendResponse(404, { success: false, message: 'Wrong password' });
+            return sendResponse(400, { success: false, message: 'Wrong password' });
         }
     
     } catch (err) {
