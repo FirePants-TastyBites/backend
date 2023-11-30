@@ -7,7 +7,7 @@ const client = new DynamoDBClient({});
 const docClient = DynamoDBDocumentClient.from(client);
 
 export async function createMenu(event) {
-    const { itemName, price, ingredients, description, category, url } = JSON.parse(event.body);
+    const { itemName, price, ingredients, description, category, url, isAvailable } = JSON.parse(event.body);
     
     try {
         const id = nanoid();
@@ -21,7 +21,8 @@ export async function createMenu(event) {
                 ingredients: ingredients,
                 description: description,
                 category: category,
-                url: url
+                url: url,
+                isAvailable: isAvailable
             }
         });
         await docClient.send(command);
