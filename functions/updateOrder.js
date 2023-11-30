@@ -31,8 +31,9 @@ export async function updateOrder(event) {
             ReturnValues: "ALL_NEW"
         });
 
-        const response = await docClient.send(command);
-        return sendResponse(200, { success: true, updatedOrder: response.Items });
+        await docClient.send(command);
+        
+        return sendResponse(200, { success: true });
 
     } catch(err) {
         return sendResponse(err.statusCode, { success: false, message: err.message });
