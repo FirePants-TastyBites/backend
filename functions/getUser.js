@@ -1,6 +1,7 @@
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocumentClient, GetCommand } from "@aws-sdk/lib-dynamodb";
 import { sendResponse } from "../responses/sendResponse";
+import { verifyPassword } from "./verifyPassword";
 
 const client = new DynamoDBClient({});
 const docClient = DynamoDBDocumentClient.from(client);
@@ -17,8 +18,10 @@ export async function getUser(event) {
         });
             
         const response = await docClient.send(command);
+
+        const isPasswordMatch = verifyPassword(password, response.Item.password);
      
-        if (password === response.Item.password) {
+        if (isPasswordMatch) {
             return sendResponse(200, { success: true, email: response.Item.email, isAdmin: response.Item.isAdmin });
         } else {
             return sendResponse(400, { success: false, message: 'Wrong password' });

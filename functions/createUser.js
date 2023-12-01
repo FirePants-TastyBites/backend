@@ -1,6 +1,7 @@
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocumentClient, PutCommand } from "@aws-sdk/lib-dynamodb";
 import { sendResponse } from "../responses/sendResponse";
+import { hashPassword } from "./hashPassword";
 
 const client = new DynamoDBClient({});
 const docClient = DynamoDBDocumentClient.from(client);
@@ -13,7 +14,7 @@ export async function createUser(event) {
             TableName: 'userTable',
             Item: {
                 email: email,
-                password: password,
+                password: hashPassword(password),
                 isAdmin: isAdmin
             }
         });
