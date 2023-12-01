@@ -1,8 +1,6 @@
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocumentClient, PutCommand } from "@aws-sdk/lib-dynamodb";
 import { sendResponse } from "../responses/sendResponse";
-import { encrypt } from "./encrypt";
-import { nanoid } from "nanoid";
 
 const client = new DynamoDBClient({});
 const docClient = DynamoDBDocumentClient.from(client);
@@ -10,15 +8,12 @@ const docClient = DynamoDBDocumentClient.from(client);
 export async function createUser(event) {
     const { email, password, isAdmin } = JSON.parse(event.body);
 
-    const id = nanoid();
-
     try {
         const command = new PutCommand({
-            TableName: 'usersTable',
+            TableName: 'userTable',
             Item: {
-                id: id,
-                email: encrypt(email),
-                password: encrypt(password),
+                email: email,
+                password: password,
                 isAdmin: isAdmin
             }
         });
