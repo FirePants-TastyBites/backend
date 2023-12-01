@@ -1,7 +1,7 @@
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
-import { DynamoDBDocumentClient, ScanCommand } from "@aws-sdk/lib-dynamodb";
+import { DynamoDBDocumentClient, GetCommand } from "@aws-sdk/lib-dynamodb";
 import { sendResponse } from "../responses/sendResponse";
-import { decrypt } from "./decrypt";
+import { verifyPassword } from "./verifyPassword";
 
 const client = new DynamoDBClient({});
 const docClient = DynamoDBDocumentClient.from(client);
@@ -10,18 +10,19 @@ export async function getUser(event) {
     const { email, password } = JSON.parse(event.body);
 
     try {
-        const command = new ScanCommand({
-            TableName: 'usersTable'
+        const command = new GetCommand({
+            TableName: 'userTable',
+            Key: {
+                email: email
+            }
         });
             
         const response = await docClient.send(command);
 
-        let allUsers = response.Items;
-        let userWithDecryptedEmail = allUsers.find(user => decrypt(user.email) === email);        
-        let decryptedPassword = decrypt(userWithDecryptedEmail.password);
+        const isPasswordMatch = verifyPassword(password, response.Item.password);
      
-        if (password === decryptedPassword) {
-            return sendResponse(200, { success: true, email: decrypt(userWithDecryptedEmail.email), isAdmin: userWithDecryptedEmail.isAdmin });
+        if (isPasswordMatch) {
+            return sendResponse(200, { success: true, email: response.Item.email, isAdmin: response.Item.isAdmin });
         } else {
             return sendResponse(400, { success: false, message: 'Wrong password' });
         }
