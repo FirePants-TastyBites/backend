@@ -6,7 +6,7 @@ const client = new DynamoDBClient({});
 const docClient = DynamoDBDocumentClient.from(client);
 
 export async function createOrder(event) {
-  const { id, userId, totalAmount, deliveryTime, orderItems, comment } = JSON.parse(event.body);
+  const { id, userId, totalPrice, deliveryTime, cart, comment } = JSON.parse(event.body);
 
   try {
     const createdAt = new Date();
@@ -16,11 +16,11 @@ export async function createOrder(event) {
       Item: {
         id: id,
         userId: userId, //Use email for now
-        totalAmount: totalAmount,
+        totalPrice: totalPrice,
         createdAt: createdAt.toISOString(),
         deliveryTime: deliveryTime,
         isLocked: false, 
-        orderItems: orderItems,
+        cart: cart,
         comment: comment,
         orderStatus: 'pending', 
       },
