@@ -52,6 +52,12 @@ functions:
       - httpApi:
           path: /order
           method: PUT
+  getOrderById:
+    handler: functions/getOrderById.getOrderById
+    events:
+      - httpApi:
+          path: /order/{id}
+          method: GET
   getOrdersByUserId:
     handler: functions/getOrdersByUserId.getOrdersByUserId
     events:
