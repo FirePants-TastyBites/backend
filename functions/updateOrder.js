@@ -13,7 +13,6 @@ export async function updateOrder(event) {
         isLocked = true;
     } else if (orderStatus === 'cancelled') {
         isLocked = false;
-        deliveryTime = '00:00';
     }
 
     try {
