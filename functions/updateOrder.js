@@ -13,7 +13,6 @@ export async function updateOrder(event) {
         isLocked = true;
     } else if (orderStatus === 'cancelled') {
         isLocked = false;
-        deliveryTime = '00:00';
     }
 
     try {
@@ -31,8 +30,9 @@ export async function updateOrder(event) {
             ReturnValues: "ALL_NEW"
         });
 
-        const response = await docClient.send(command);
-        return sendResponse(200, { success: true, updatedOrder: response.Items });
+        await docClient.send(command);
+        
+        return sendResponse(200, { success: true });
 
     } catch(err) {
         return sendResponse(err.statusCode, { success: false, message: err.message });

@@ -28,6 +28,12 @@ functions:
       - httpApi:
           path: /menu
           method: POST
+  updateMenu:
+    handler: functions/updateMenu.updateMenu
+    events:
+      - httpApi:
+          path: /menu
+          method: PUT
   getOrders:
     handler: functions/getOrders.getOrders
     events:
@@ -46,23 +52,29 @@ functions:
       - httpApi:
           path: /order
           method: PUT
+  getOrderById:
+    handler: functions/getOrderById.getOrderById
+    events:
+      - httpApi:
+          path: /order/{id}
+          method: GET
   getOrdersByUserId:
     handler: functions/getOrdersByUserId.getOrdersByUserId
     events:
       - httpApi:
           path: /user/orders
-          method: GET
+          method: POST
   getUser:
     handler: functions/getUser.getUser
     events:
       - httpApi:
           path: /user
-          method: GET
+          method: POST
   createUser:
     handler: functions/createUser.createUser
     events:
       - httpApi:
-          path: /user
+          path: /user/create
           method: POST
 
 resources:
@@ -98,15 +110,15 @@ resources:
             Projection:
               ProjectionType: ALL
         BillingMode: PAY_PER_REQUEST
-    usersTable:
+    userTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: usersTable
+        TableName: userTable
         AttributeDefinitions:
-          - AttributeName: id
+          - AttributeName: email
             AttributeType: S
         KeySchema:
-          - AttributeName: id
+          - AttributeName: email
             KeyType: HASH
         BillingMode: PAY_PER_REQUEST
 
